@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
 
   validate :password_valid?
 
-  enum kind: %i[common admin]
+  enum kind: %i[client admin quality_assurance dev_front dev_back design product_manager]
 
   before_save :set_full_name
 

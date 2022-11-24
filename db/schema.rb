@@ -10,9 +10,49 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_23_204854) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_24_030939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bugs", force: :cascade do |t|
+    t.text "description", null: false
+    t.string "resume", limit: 256, null: false
+    t.string "link", null: false
+    t.string "estimative", limit: 16, null: false
+    t.integer "status", default: 0
+    t.integer "quality_assurance_status", default: 0
+    t.integer "responsible_sector", default: 0
+    t.integer "priority", default: 0
+    t.integer "responsible_related_id"
+    t.integer "reponsible_solution_id"
+    t.integer "quality_assurance_responsible_id"
+    t.decimal "percentage_solution", default: "0.0", null: false
+    t.datetime "need_for_resolution_at"
+    t.datetime "resolved_at"
+    t.bigint "project_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_bugs_on_project_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.text "content"
+    t.bigint "bug_id", null: false
+    t.string "commentable_type", null: false
+    t.bigint "commentable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bug_id"], name: "index_comments_on_bug_id"
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.string "name", limit: 64, null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_projects_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
@@ -42,4 +82,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_23_204854) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "bugs", "projects"
+  add_foreign_key "comments", "bugs"
+  add_foreign_key "projects", "users"
 end
