@@ -74,5 +74,5 @@ end
 
 gem 'devise' 
 gem 'amazing_print' 
-#gem 'devise_token_auth'
+gem 'devise_token_auth'
 gem 'pry'
